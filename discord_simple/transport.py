@@ -2,6 +2,7 @@ import logging
 import urllib3
 import websocket
 import json
+import sys
 import time
 import certifi
 import threading
@@ -90,6 +91,8 @@ class Transport:
       self.logger.debug(m)
 
   def on_error(self,ws,error):
+    if type(error).__name__ == "KeyboardInterrupt":
+      sys.exit()
     self.logger.debug("error")
 
   def on_connect(self,ws):

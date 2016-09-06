@@ -1,5 +1,6 @@
 import logging
 import json
+import sys
 import time
 from .transport import Transport
 
@@ -32,7 +33,15 @@ class Bot:
       self.con_message(data)
 
   def forever_loop(self):
-    self.t.run_forever()
+    try:
+      self.t.run_forever()
+      while True:
+        self.t=None
+        self.connect()
+    except KeyboardInterrupt:
+      print("inter")
+      sys.exit()
+
 
   def send_message(self, user, message):
     self.t.send_message(user,message)
