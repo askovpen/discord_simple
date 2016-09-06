@@ -29,6 +29,7 @@ class Bot:
   def on_message(self,data):
     if self.user.id!=data.author.id:
       self.logger.info("Message from {}: {}".format(data.author, data.content))
+      self.con_message(data)
 
   def forever_loop(self):
     self.t.run_forever()
