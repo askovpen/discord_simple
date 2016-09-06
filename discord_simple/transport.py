@@ -5,7 +5,6 @@ import json
 import time
 import certifi
 import threading
-import requests
 from random import randint as random_integer
 from .models.user import User
 from .models.message import Message
