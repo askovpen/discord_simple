@@ -27,14 +27,14 @@ bot.forever_loop()
 
 ### User
 * `id`
-* `avatar`
+* `avatar` 
 * `username`
 * `discriminator`
 
 ### Message
-* `author`
-* `content`
-* `timestamp`
+* `author` : [User](#user)
+* `content` : Message text
+* `timestamp` 
 
 ### Methods:
 * `send_message('username#discriminator','message')`
