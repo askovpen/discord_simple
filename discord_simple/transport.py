@@ -61,11 +61,12 @@ class Transport:
     self.ws.run_forever()
 
   def on_close(self,ws):
-    self.logger.debug("close")
+    self.logger.debug("Websocket connection close")
 
   def on_message(self,ws,message):
     m=json.loads(message)
-    self.sequence=m["s"]
+    if m.get("s",0)>0:
+      self.sequence=m["s"]
     if m["op"] == self.DISPATCH:
       if m["t"] == "READY":
         for channel in m["d"]["private_channels"]:
@@ -81,17 +82,18 @@ class Transport:
     elif m["op"] == self.HELLO:
       interval = int(m['d']['heartbeat_interval'] / 1000)
       self.h=Heartbeat(self,interval)
-##      thread.start_new_thread(self.h.run,())
-      threading.Thread(target=self.h.run).start()
+      self.h.daemon=True
+      self.h.start()
     elif m["op"] == self.HEARTBEAT_ACK:
       pass
     else:
-      self.debug(m)
+      self.logger.debug(m)
 
   def on_error(self,ws,error):
     self.logger.debug("error")
 
   def on_connect(self,ws):
+    self.logger.info("onconnect")
     msg={
       'op': self.IDENTIFY,
       'd': {
@@ -117,12 +119,13 @@ class Transport:
         self.logger.info(cid)
         self.post('channels/'+cid+'/messages', json.dumps({'content': message,'nonce': random_integer(-2**63, 2**63 - 1)}))
 
-class Heartbeat:
+class Heartbeat(threading.Thread):
 
   def __init__(self,t,interval):
     self.logger = logging.getLogger(__name__)
     self.t=t
     self.interval=interval
+    threading.Thread.__init__(self)
 
   def run(self):
     self.logger.info("heartbeat started")
