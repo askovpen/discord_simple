@@ -66,7 +66,7 @@ class Transport:
 
   def on_message(self,ws,message):
     m=json.loads(message)
-    if m.get("s",0)>0:
+    if m.get("s",0):
       self.sequence=m["s"]
     if m["op"] == self.DISPATCH:
       if m["t"] == "READY":
