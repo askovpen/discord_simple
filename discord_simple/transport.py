@@ -118,7 +118,10 @@ class Transport:
   def send_message(self, user, message):
     self.logger.info("sending message to {}: {}".format(user, message))
     for cid in self.channels:
-      if (str(self.channels[cid]) == user):
+      self.logger.debug(user)
+      self.logger.debug(cid)
+      self.logger.debug(self.channels[cid])
+      if (str(self.channels[cid]) == str(user)):
         self.logger.info(cid)
         self.post('channels/'+cid+'/messages', json.dumps({'content': message,'nonce': random_integer(-2**63, 2**63 - 1)}))
 

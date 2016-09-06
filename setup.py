@@ -9,7 +9,7 @@ def requirements():
       requirements_list.append(install.strip())
   return requirements_list
 setup(name='discord_simple',
-  version='0.0.1.10',
+  version='0.0.1.12',
   license='LGPLv3',
   description='Discord simple API',
   author='Alexander N. Skovpen',
