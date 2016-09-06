@@ -10,6 +10,10 @@ discord_simple
    :target: https://pypi.python.org/pypi/discord_simple
    :alt: Supported python versions
 
+.. image:: https://travis-ci.org/askovpen/discord_simple.svg?branch=master
+   :target: https://travis-ci.org/askovpen/discord_simple
+   :alt: Travis CI Status
+
 ----------
 Installing
 ----------
