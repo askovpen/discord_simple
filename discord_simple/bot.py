@@ -2,6 +2,7 @@ import logging
 import json
 import sys
 import time
+import types
 from .transport import Transport
 
 class Bot:
@@ -25,19 +26,18 @@ class Bot:
   def on_connect(self, user):
     self.user=user
     self.logger.info("connected as {}".format(user))
-    self.con_connect(user)
+    if type(self.con_connect)!=types.NoneType:
+      self.con_connect(user)
 
   def on_message(self,data):
     if self.user.id!=data.author.id:
       self.logger.info("Message from {}: {}".format(data.author, data.content))
-      self.con_message(data)
+      if type(self.con_message)!=types.NoneType:
+        self.con_message(data)
 
   def forever_loop(self):
     try:
       self.t.run_forever()
-      while True:
-        self.t=None
-        self.connect()
     except KeyboardInterrupt:
       print("inter")
       sys.exit()
