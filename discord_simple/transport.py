@@ -66,6 +66,7 @@ class Transport:
 
   def on_message(self,ws,message):
     m=json.loads(message)
+    self.logger.debug(m)
     if m.get("s",0):
       self.sequence=m["s"]
     if m["op"] == self.DISPATCH:
@@ -118,11 +119,8 @@ class Transport:
   def send_message(self, user, message):
     self.logger.info("sending message to {}: {}".format(user, message))
     for cid in self.channels:
-      self.logger.debug(user)
-      self.logger.debug(cid)
-      self.logger.debug(self.channels[cid])
       if (str(self.channels[cid]) == str(user)):
-        self.logger.info(cid)
+        self.logger.debug(cid)
         self.post('channels/'+cid+'/messages', json.dumps({'content': message,'nonce': random_integer(-2**63, 2**63 - 1)}))
 
 class Heartbeat(threading.Thread):
