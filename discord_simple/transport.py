@@ -95,6 +95,9 @@ class Transport:
       elif m["t"] == "GUILD_CREATE":
         pass
       elif m["t"] == "MESSAGE_CREATE":
+#        if not m["d"]["channel_id"] in self.channels:
+#        print("ch:")
+#        print(self.get("channels/"+m["d"]["channel_id"]))
         self.con_message(Message(m["d"]))
     elif m["op"] == self.HELLO:
       interval = int(m['d']['heartbeat_interval'] / 1000)
@@ -127,15 +130,21 @@ class Transport:
                  'v' : 3}}
     ws.send(json.dumps(msg))
 
-  def send_message(self, user, message):
+  def send_message(self, user=None, message=None, channel=None):
     """ Todo """
     self.logger.info("sending message to %s: %s", user, message)
-    for cid in self.channels:
-      if str(self.channels[cid]) == str(user):
-        self.logger.debug(cid)
-        self.post('channels/'+cid+'/messages',
-                  json.dumps({'content': message,
-                              'nonce': random_integer(-2**63, 2**63 - 1)}))
+    cid=channel
+    if not cid:
+      for cid in self.channels:
+        if str(self.channels[cid]) == str(user):
+          channel=cid
+          self.logger.debug(cid)
+    if (channel):
+      self.post('channels/'+cid+'/messages',
+                json.dumps({'content': message,
+                            'nonce': random_integer(-2**63, 2**63 - 1)}))
+    else:
+      logger.error("Unknown user %s",user)
 
 class Heartbeat(threading.Thread):
   """ Todo """
