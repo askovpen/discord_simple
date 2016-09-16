@@ -158,13 +158,13 @@ class Heartbeat(threading.Thread):
 
   def run(self):
     """ Todo """
-    self.logger.info("heartbeat started")
+    self.logger.debug("heartbeat started")
     while True:
       time.sleep(self.interval)
       self.send_heartbeat()
 
   def send_heartbeat(self):
     """ Todo """
-    self.logger.info("heartbeat "+str(self.t.sequence))
+    self.logger.debug("heartbeat "+str(self.t.sequence))
     self.t.ws.send(json.dumps({'op': self.t.HEARTBEAT,
                                'd': self.t.sequence}))
